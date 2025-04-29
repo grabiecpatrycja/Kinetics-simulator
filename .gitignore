@@ -1,0 +1,11 @@
+*.pyc
+*~
+__pycache__/
+
+.env
+myvenv/
+venv/
+
+.vscode/
+.history/
+*.sublime-workspace
