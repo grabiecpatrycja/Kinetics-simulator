@@ -13,11 +13,11 @@ def start_gui():
         label.grid(row=i, column=0, pady=5, padx=5,sticky='w')
 
         if label_text == 'Reaction order':
-            var = tk.StringVar(window)
+            var = tk.IntVar(window)
             var.set('0')
             entry = tk.OptionMenu(window, var, '0', '1', '2')
         else: 
-            var = tk.StringVar(window) 
+            var = tk.DoubleVar(window) 
             entry = tk.Entry(window, textvariable=var)
         
         entry.grid(row=i, column=1, pady=5, padx=5)

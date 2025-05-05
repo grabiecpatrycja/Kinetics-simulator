@@ -1,24 +1,19 @@
-def get_user_inputs(input_fields):
-    return {
-        'reaction_order': input_fields['Reaction order'].get(),
-        'initial_concentration': input_fields['Initial concentration'].get(),
-        'rate_constant': input_fields['Reaction rate constant'].get(),
-        'time': input_fields['Time'].get()
-    }
+from tkinter import TclError
 
-def validate_inputs(data):
+def validate_user_inputs(input_fields):
     try:
-        order = int(data['reaction_order'])
-        a0 = float(data['initial_concentration'])
-        k = float(data['rate_constant'])
-        t = float(data['time'])
+        order = input_fields['Reaction order'].get()
+        a0 = input_fields['Initial concentration'].get()
+        k = input_fields['Reaction rate constant'].get()
+        t = input_fields['Time'].get()
 
+        print(type(order))
         if a0 <= 0:
-            return False, 'Initial concentration must be greater than 0.', None
+            return 'Initial concentration must be greater than 0.', None
         if k <= 0:
-            return False, 'Reaction rate constant must be greater than 0.', None
-        if t <= 0 or t > 1000:
-            return False, 'Time must be between 0 and 1000 seconds.', None
+            return 'Reaction rate constant must be greater than 0.', None
+        if t <= 0 or t> 1000:
+            return 'Time must be between 0 and 1000 seconds.', None
         
         cleaned_data = {
             'reaction_order': order,
@@ -26,7 +21,7 @@ def validate_inputs(data):
             'rate_constant': k,
             'time': t
         }
-        return True,'', cleaned_data
+        return '', cleaned_data
     
-    except ValueError:
-        return False, 'All inputs must be numeric.', None
+    except TclError:
+        return 'All inputs must be numeric.', None

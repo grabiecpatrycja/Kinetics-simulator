@@ -10,12 +10,10 @@ def simulate(data):
 
     time = np.linspace(0, t, 500)
 
-    match order:
-        case 0:
-            a_t = zero_order(a0, k, time)
-        case 1:
-            a_t = first_order(a0, k, time)
-        case 2:
-            a_t = second_order(a0, k, time)
+    order_functions = {
+        0: zero_order,
+        1: first_order,
+        2: second_order,
+    }
     
-    plot_concentration(time, a_t, order)
+    plot_concentration(time, order_functions[order](a0, k, time), order)
