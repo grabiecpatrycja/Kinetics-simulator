@@ -1,27 +1,44 @@
 from tkinter import TclError
 
-def validate_user_inputs(input_fields):
-    try:
-        order = input_fields['Reaction order'].get()
-        a0 = input_fields['Initial concentration'].get()
-        k = input_fields['Reaction rate constant'].get()
-        t = input_fields['Time'].get()
+basic_schema = {
+    'Reaction order': {},
+    'Initial concentration': {'min': 0},
+    'Reaction rate constant': {'min': 0},
+    'Time': {'min': 0, 'max': 6000}
+}
 
-        print(type(order))
-        if a0 <= 0:
-            return 'Initial concentration must be greater than 0.', None
-        if k <= 0:
-            return 'Reaction rate constant must be greater than 0.', None
-        if t <= 0 or t> 1000:
-            return 'Time must be between 0 and 1000 seconds.', None
+temperature_schema ={
+    'Reaction order': {},
+    'Initial concentration': {'min': 0},
+    'Time': {'min': 0, 'max': 6000},
+    'Activation energy': {'min': 5, 'max': 300},
+    'Arrhenius factor':{'min': 1e6, 'max': 10e20, 'optional': True},
+    'Temperature': {'min': 0, 'max': 2000}
+}
+
+def validate_user_inputs(input_fields, schema):
+    cleaned_data = {}
+    for key, rules in schema.items():
+        try:
+            value = input_fields[key].get()
+
+            if value is None:
+                if rules.get('optional'):
+                    continue
+                else:
+                    raise ValueError(f"Missing value for '{key}'.")
+        except TclError:
+            raise ValueError("All inputs must be numeric.")
         
-        cleaned_data = {
-            'reaction_order': order,
-            'initial_concentration': a0,
-            'rate_constant': k,
-            'time': t
-        }
-        return '', cleaned_data
+        if 'optional' in rules and value == 0:
+            cleaned_data[key] = None
+            continue
+        
+        if 'min' in rules and value <= rules['min']:
+            raise ValueError(f"{key} must be greater than {rules['min']}.")
+        if 'max' in rules and value > rules['max']:
+            raise ValueError(f"{key} cannot be greater than {rules['max']}.")
+
+        cleaned_data[key] = value
     
-    except TclError:
-        return 'All inputs must be numeric.', None
+    return cleaned_data

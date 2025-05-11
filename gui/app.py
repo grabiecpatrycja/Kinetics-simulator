@@ -1,29 +1,23 @@
-from gui.events import simulate_click
+from gui.basic_tab import build_basic_tab
+from gui.temperature_tab import build_temperature_tab
 import tkinter as tk
+from tkinter import ttk
 
 def start_gui():
     window = tk.Tk()
     window.title('Kinetics simulator')
     window.geometry('600x400')
-    labels = ['Reaction order', 'Initial concentration', 'Reaction rate constant', 'Time']
-    input_fields = {}
+    
+    notebook = ttk.Notebook(window)
+    notebook.pack(expand=True, fill='both')
 
-    for i, label_text in enumerate(labels):
-        label = tk.Label(window, text=label_text, font=30)
-        label.grid(row=i, column=0, pady=5, padx=5,sticky='w')
+    tab_basic = tk.Frame(notebook)
+    notebook.add(tab_basic, text='Basic Reaction')
 
-        if label_text == 'Reaction order':
-            var = tk.IntVar(window)
-            var.set('0')
-            entry = tk.OptionMenu(window, var, '0', '1', '2')
-        else: 
-            var = tk.DoubleVar(window) 
-            entry = tk.Entry(window, textvariable=var)
-        
-        entry.grid(row=i, column=1, pady=5, padx=5)
-        input_fields[label_text] = var
+    tab_temp = tk.Frame(notebook)
+    notebook.add(tab_temp, text='Temperature Effecr')
 
-    button = tk.Button(window, text='Simulate', command=lambda: simulate_click(input_fields))
-    button.grid(row=4, column=1)
+    build_basic_tab(tab_basic)
+    build_temperature_tab(tab_temp)
 
     window.mainloop()

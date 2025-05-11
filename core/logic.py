@@ -2,12 +2,7 @@ from core.kinetisc import zero_order, first_order, second_order
 from core.plotter import plot_concentration
 import numpy as np
 
-def simulate(data):
-    order = data['reaction_order']
-    a0 = data['initial_concentration']
-    k = data['rate_constant']
-    t = data['time']
-
+def simulate(order, a0, k, t):
     time = np.linspace(0, t, 500)
 
     order_functions = {
