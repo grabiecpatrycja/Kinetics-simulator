@@ -20,7 +20,5 @@ def get_default_af(order):
     return defaults[order]
 
 def calculate_k_arrhenius(af, ea, temp, order):
-    if Af is None:
-        Af = get_default_af(order)
-    k = Af * np.exp((-ea *1000) / (R * temp))
-    return k
+    af = af or get_default_af(order)
+    return af * np.exp((-ea *1000) / (R * temp))
